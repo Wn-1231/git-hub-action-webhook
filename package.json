@@ -1,0 +1,22 @@
+{
+  "name": "git-hub-action-webhook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wn-1231/git-hub-action-webhook.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wn-1231/git-hub-action-webhook/issues"
+  },
+  "homepage": "https://github.com/Wn-1231/git-hub-action-webhook#readme",
+  "dependencies": {
+    "nodemailer": "^6.7.5"
+  }
+}
