@@ -1,6 +1,6 @@
 let http = require("http");
 let crypto = require("crypto");
-var spawn = require("child_process").spawn;
+var spawn = require("child_process").spawn;  // 子进程，进行执行脚本
 
 let sendMail = require("./sendMail");
 
@@ -28,27 +28,29 @@ let server = http.createServer(function (req, res) {
       
       res.setHeader("Content-Type", "application/json");
       res.end(JSON.stringify({ ok: true }));
-      //===========分割线===================
-    //   if (event === "push") {
-    //     let payload = JSON.parse(body);
-    //     let child = spawn("sh", [`./${payload.repository.name}.sh`]);
-    //     let buffers = [];
-    //     child.stdout.on("data", function (buffer) {
-    //       buffers.push(buffer);
-    //     });
-    //     child.stdout.on("end", function () {
-    //       let logs = Buffer.concat(buffers).toString();
-    //       sendMail(`
-    //         <h1>部署日期: ${new Date()}</h1>
-    //         <h2>部署人: ${payload.pusher.name}</h2>
-    //         <h2>部署邮箱: ${payload.pusher.email}</h2>
-    //         <h2>提交信息: ${
-    //           payload.head_commit && payload.head_commit["message"]
-    //         }</h2>
-    //         <h2>布署日志: ${logs.replace("\r\n", "<br/>")}</h2>
-    //     `);
-    //     });
-    //   }
+
+
+      //===========根据仓库名称，进行自动化构建===================
+      if (event === "push") {
+        let payload = JSON.parse(body);
+        let child = spawn("sh", [`./${payload.repository.name}.sh`]);
+        let buffers = [];
+        child.stdout.on("data", function (buffer) {
+          buffers.push(buffer);
+        });
+        child.stdout.on("end", function () {
+          let logs = Buffer.concat(buffers).toString();
+          sendMail(`
+            <h1>部署日期: ${new Date()}</h1>
+            <h2>部署人: ${payload.pusher.name}</h2>
+            <h2>部署邮箱: ${payload.pusher.email}</h2>
+            <h2>提交信息: ${
+              payload.head_commit && payload.head_commit["message"]
+            }</h2>
+            <h2>布署日志: ${logs.replace("\r\n", "<br/>")}</h2>
+        `);
+        });
+      }
     });
   } else {
     res.end("Now Found!");
