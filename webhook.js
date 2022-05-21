@@ -33,6 +33,7 @@ let server = http.createServer(function (req, res) {
       //===========根据仓库名称，进行自动化构建===================
       if (event === "push") {
         let payload = JSON.parse(body);
+        console.log('payload',payload)
         let child = spawn("sh", [`./${payload.repository.name}.sh`]);
         let buffers = [];
         child.stdout.on("data", function (buffer) {
