@@ -49,7 +49,7 @@ let server = http.createServer(function (req, res) {
               payload.head_commit && payload.head_commit["message"]
             }</h2>
             <h2>布署日志: ${logs.replace("\r\n", "<br/>")}</h2>
-        `);
+        `,payload.repository.name);
         });
       }
     });
