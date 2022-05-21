@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "pm2 start ./webhook.js --name webhook -watch",
+    "stop": "pm2 stop webhook"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/Wn-1231/git-hub-action-webhook#readme",
   "dependencies": {
-    "nodemailer": "^6.7.5"
+    "nodemailer": "^6.7.5",
+    "pm2": "^5.2.0"
   }
 }
