@@ -43,13 +43,16 @@ let server = http.createServer(function (req, res) {
           let logs = Buffer.concat(buffers).toString();
           sendMail(`
             <h1>部署日期: ${new Date()}</h1>
-            <h2>部署人: ${payload.pusher.name}</h2>
-            <h2>部署邮箱: ${payload.pusher.email}</h2>
+            <h2>部署人: ${payload.head_commit.author.name}</h2>
+            <h2>部署邮箱: ${payload.head_commit.author.email}</h2>
             <h2>提交信息: ${
               payload.head_commit && payload.head_commit["message"]
             }</h2>
-            <h2>布署日志: ${logs.replace("\r\n", "<br/>")}</h2>
-        `,payload.repository.name);
+            <h2>布署日志:</h2>
+            <div>log: </br> 
+              ${logs.replace("\r\n", "<br/>")}
+            </div>
+            `,payload.repository.name);
         });
       }
     });
