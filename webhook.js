@@ -1,17 +1,17 @@
 let http = require("http");
 let crypto = require("crypto");
-var spawn = require("child_process").spawn;  // 子进程，进行执行脚本
-
+var spawn = require("child_process").spawn;
 let sendMail = require("./sendMail");
 
+// github 配置自定义验证的秘钥
 const SECRET = "123456";
-
+// 加密验证
 function sign(data) {
   return "sha1=" + crypto.createHmac("sha1", SECRET).update(data).digest("hex");
 }
-
+// 启动 ci/cd 服务器
 let server = http.createServer(function (req, res) {
-  console.log(req.method, req.url);
+  // 监听 git hub webhook
   if (req.url == "/webhook" && req.method == "POST") {
     let buffers = [];
     req.on("data", function (data) {
@@ -21,24 +21,25 @@ let server = http.createServer(function (req, res) {
       let body = Buffer.concat(buffers);
       let sig = req.headers["x-hub-signature"];
       let event = req.headers["x-github-event"];
-      let id = req.headers["x-github-delivery"];
+      // 验证加密
       if (sig !== sign(body)) {
         return res.end("Not Allowed");
       }
-      
       res.setHeader("Content-Type", "application/json");
       res.end(JSON.stringify({ ok: true }));
 
 
-      //===========根据仓库名称，进行自动化构建===================
+      //=========== 监听 push 事件，根据仓库名称，触发对应仓库的构建脚本 ===================
       if (event === "push") {
         let payload = JSON.parse(body);
-        console.log('payload',payload)
+        // 触发 CI/CD 脚本
         let child = spawn("sh", [`../${payload.repository.name}/${payload.repository.name}.sh`]);
         let buffers = [];
+        // 监听CI/CD 脚本运行日志
         child.stdout.on("data", function (buffer) {
           buffers.push(buffer);
         });
+        // 监听CI/CD 构建结果，发送邮件进行通知
         child.stdout.on("end", function () {
           let logs = Buffer.concat(buffers).toString();
           sendMail(`
