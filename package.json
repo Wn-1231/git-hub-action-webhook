@@ -1,5 +1,5 @@
 {
-  "name": "git-hub-action-webhook",
+  "name": "git-hub-webhook",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wn-1231/git-hub-action-webhook.git"
+    "url": "git+https://github.com/Wn-1231/git-hub-webhook.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Wn-1231/git-hub-action-webhook/issues"
+    "url": "https://github.com/Wn-1231/git-hub-webhook/issues"
   },
-  "homepage": "https://github.com/Wn-1231/git-hub-action-webhook#readme",
+  "homepage": "https://github.com/Wn-1231/git-hub-webhook#readme",
   "dependencies": {
     "nodemailer": "^6.7.5",
     "pm2": "^5.2.0"
