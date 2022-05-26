@@ -33,7 +33,7 @@ let server = http.createServer(function (req, res) {
       if (event === "push") {
         let payload = JSON.parse(body);
         // 触发 CI/CD 脚本
-        let child = spawn("sh", [`../${payload.repository.name}/${payload.repository.name}.sh`]);
+        let child = spawn("sh", [`../${payload.repository.name}/cicd.sh`]);
         let buffers = [];
         // 监听CI/CD 脚本运行日志
         child.stdout.on("data", function (buffer) {
