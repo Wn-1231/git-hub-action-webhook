@@ -38,6 +38,7 @@ let server = http.createServer(function (req, res) {
         let buffers = [];
         // 监听CI/CD 脚本运行日志
         child.stdout.on("data", function (buffer) {
+          console.log('buffer',buffer)
           buffers.push(buffer);
         });
         // 监听CI/CD 构建结果，发送邮件进行通知
