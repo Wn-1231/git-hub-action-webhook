@@ -14,9 +14,11 @@ let server = http.createServer(function (req, res) {
   // 监听 git hub webhook
   if (req.url == "/webhook" && req.method == "POST") {
     let buffers = [];
+
     req.on("data", function (data) {
       buffers.push(data);
     });
+
     req.on("end", function () {
       let body = Buffer.concat(buffers);
       let sig = req.headers["x-hub-signature"];
@@ -25,6 +27,7 @@ let server = http.createServer(function (req, res) {
       if (sig !== sign(body)) {
         return res.end("Not Allowed");
       }
+
       res.setHeader("Content-Type", "application/json");
       res.end(JSON.stringify({ ok: true }));
 
@@ -33,14 +36,17 @@ let server = http.createServer(function (req, res) {
       if (event === "push") {
         let payload = JSON.parse(body);
         console.log('payload',payload)
+
         // 触发 CI/CD 脚本
         let child = spawn("sh", [`../${payload.repository.name}/cicd.sh`]);
         let buffers = [];
+
         // 监听CI/CD 脚本运行日志
         child.stdout.on("data", function (buffer) {
           console.log('buffer',buffer)
           buffers.push(buffer);
         });
+        
         // 监听CI/CD 构建结果，发送邮件进行通知
         child.stdout.on("end", function () {
           let logs = Buffer.concat(buffers).toString();
