@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2 start ./webhook.js --watch --name='vue-webhook'",
-    "stop": "pm2 stop vue-webhook"
+    "stop": "pm2 stop vue-webhook",
+    "log": "pm2 logs"
   },
   "repository": {
     "type": "git",
