@@ -32,6 +32,7 @@ let server = http.createServer(function (req, res) {
       //=========== 监听 push 事件，根据仓库名称，触发对应仓库的构建脚本 ===================
       if (event === "push") {
         let payload = JSON.parse(body);
+        console.log('payload',payload)
         // 触发 CI/CD 脚本
         let child = spawn("sh", [`../${payload.repository.name}/cicd.sh`]);
         let buffers = [];
